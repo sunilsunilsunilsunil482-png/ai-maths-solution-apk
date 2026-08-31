@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MathAI - Maths Solver</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <h1>🧮 MathAI</h1>
+        <p class="subtitle">AI Maths Problem Solver</p>
+
+        <div class="box">
+
+            <textarea
+                id="question"
+                placeholder="Enter your maths question here...&#10;&#10;Example: Solve 2x + 5 = 15"
+            ></textarea>
+
+            <button onclick="solveMath()">Solve Problem</button>
+
+        </div>
+
+        <div id="result" class="result">
+            <h2>Solution</h2>
+            <p>Your step-by-step solution will appear here.</p>
+        </div>
+
+    </div>
+
+    <script>
+
+        function solveMath() {
+
+            let question = document.getElementById("question").value;
+
+            if (question.trim() === "") {
+                alert("Please enter a maths question!");
+                return;
+            }
+
+            document.getElementById("result").innerHTML = `
+                <h2>Solution</h2>
+                <p>Question: ${question}</p>
+                <br>
+                <p>🤖 AI is solving your problem...</p>
+            `;
+        }
+
+    </script>
+
+</body>
+  </html>
