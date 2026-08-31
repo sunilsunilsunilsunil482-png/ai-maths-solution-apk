@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MathAI - AI Maths Solver</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Puter AI -->
+    <script src="https://js.puter.com/v2/"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>🧮 MathAI</h1>
+
+    <p class="subtitle">
+        AI Maths Problem Solver
+    </p>
+
+    <div class="box">
+
+        <textarea
+            id="question"
+            placeholder="Enter your maths question...&#10;&#10;Example: Solve 2x + 5 = 15"
+        ></textarea>
+
+        <button id="solveButton" onclick="solveMath()">
+            🚀 Solve Problem
+        </button>
+
+    </div>
+
+    <div id="result" class="result">
+
+        <h2>📚 Solution</h2>
+
+        <p>
+            अपना Maths question ऊपर लिखें।
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function solveMath() {
+
+    const question =
+        document.getElementById("question").value.trim();
+
+    const result =
+        document.getElementById("result");
+
+    const button =
+        document.getElementById("solveButton");
+
+
+    if (question === "") {
+
+        alert("Please enter a maths question!");
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.innerText = "🤖 Solving...";
+
+
+    result.innerHTML = `
+        <h2>🤖 AI is solving...</h2>
+        <p>Please wait...</p>
+    `;
+
+
+    try {
+
+        const prompt = `
+You are MathAI, an expert mathematics tutor.
+
+Solve this mathematics problem:
+
+${question}
+
+Give the answer in Hindi.
+
+Show the solution step-by-step.
+Explain each important calculation clearly.
+At the end write:
+
+Final Answer: ...
+
+Do not skip important steps.
+`;
+
+
+        const response = await puter.ai.chat(prompt, {
+            model: "gpt-5.6-luna"
+        });
+
+
+        result.innerHTML = `
+            <h2>✅ Solution</h2>
+
+            <div class="solution">
+                ${formatAnswer(response)}
+            </div>
+        `;
+
+    }
+
+    catch (error) {
+
+        result.innerHTML = `
+            <h2>❌ Error</h2>
+
+            <p>
+                AI से answer लेने में समस्या हुई।
+            </p>
+
+            <p>
+                कृपया फिर से कोशिश करें।
+            </p>
+        `;
+
+        console.error(error);
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerText = "🚀 Solve Problem";
+
+}
+
+
+function formatAnswer(response) {
+
+    let text = "";
+
+    if (typeof response === "string") {
+
+        text = response;
+
+    }
+
+    else if (response && response.message) {
+
+        if (typeof response.message.content === "string") {
+
+            text = response.message.content;
+
+        }
+
+        else if (Array.isArray(response.message.content)) {
+
+            text = response.message.content
+                .map(item => item.text || "")
+                .join("");
+
+        }
+
+    }
+
+
+    if (!text) {
+
+        text = "AI ने कोई solution नहीं दिया।";
+
+    }
+
+
+    return text
+        .replace(/\n/g, "<br>")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+}
+
+</script>
+
+</body>
+  </html>
